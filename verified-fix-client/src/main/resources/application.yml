@@ -1,0 +1,31 @@
+# ---------------------------------------------------------------
+# verified-fix-client configuration.
+# This is the ONLY file that differs between clients:
+#   verified-fix-client, verified-fix-pc-client, verified-fix-finvu-client ...
+# Never put real passwords here. Use environment variables.
+# ---------------------------------------------------------------
+server:
+  address: 127.0.0.1        # REST of the client listens on localhost only (no login yet)
+  port: 8081
+
+client:
+  vendor-code: VERIFIED          # sent in tag 9001 on every request
+  fix:
+    host: localhost              # the FIX server
+    port: 9877
+    sender-comp-id: "<your-comp-id>"   # who we are: the CompID assigned to you by Verified
+    target-comp-id: VERIFIEDFIX      # the server
+    heartbeat-seconds: 30
+    reset-on-logon: true         # development only; use false in production
+  stomp:
+    enabled: false               # true = also publish order updates to a STOMP broker
+    host: ${STOMP_HOST:localhost}
+    port: ${STOMP_PORT:61614}
+    ssl: true
+    username: ${STOMP_USER:}
+    password: ${STOMP_PASSWORD:}
+    topic-new: NewOrder
+    topic-filled: FilledOrder
+    topic-cancelled: CancelledOrder
+    topic-replaced: ReplacedOrder
+    topic-rejected: RejectedOrder
